@@ -1,4 +1,19 @@
-module Lib (someFunc) where
+{-# LANGUAGE TemplateHaskellQuotes #-}
 
-someFunc :: IO ()
-someFunc = putStrLn "HelloWorld"
+module Lib (tadd, tfib) where
+
+import Language.Haskell.TH
+
+tadd :: Integer -> Integer -> ExpQ
+tadd l r = infixE
+    (Just $ litE $ integerL l)
+    (varE '(+))
+    (Just $ litE $ integerL r)
+
+tfib :: Integer -> ExpQ
+tfib 1 = litE $ integerL 1
+tfib 2 = litE $ integerL 1
+tfib n = infixE
+    (Just $ tfib (n-1))
+    (varE '(+))
+    (Just $ tfib (n-2))
