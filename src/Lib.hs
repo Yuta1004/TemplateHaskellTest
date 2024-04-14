@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskellQuotes #-}
 
-module Lib (tadd, tfib, tid) where
+module Lib (tadd, tfib, tid, tif, texp) where
 
 import Language.Haskell.TH
 
@@ -20,3 +20,17 @@ tfib n = infixE
 
 tid :: ExpQ -> ExpQ
 tid s = s
+
+tif :: ExpQ -> ExpQ
+tif s = do
+    s' <- runQ s
+    case s' of
+        (CondE c _ _) -> return c
+        _ -> error "Not a conditional expression"
+
+texp :: ExpQ -> ExpQ
+texp e = do
+    e' <- runQ e
+    case e' of
+        CondE{} -> stringE "CondE"
+        _ -> stringE "!!No match!!"
