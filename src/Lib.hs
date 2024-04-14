@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskellQuotes #-}
 
-module Lib (tadd, tfib) where
+module Lib (tadd, tfib, tid) where
 
 import Language.Haskell.TH
 
@@ -17,3 +17,6 @@ tfib n = infixE
     (Just $ tfib (n-1))
     (varE '(+))
     (Just $ tfib (n-2))
+
+tid :: ExpQ -> ExpQ
+tid s = s
